@@ -162,8 +162,8 @@ void display(void) {
             彼は豆腐生の心の中で生き続ける
         */
         render_string(WINDOW_WIDTH/2*(-0.4), WINDOW_HEIGHT/2*(0.45) - 7.5, 0, "Tips:");
-        render_jstring(WINDOW_WIDTH/2*(-0.3), WINDOW_HEIGHT/2*(0.2) - 7.5, "豆腐からsin3は去ってしまったけれど、");
-        render_jstring(WINDOW_WIDTH/2*(-0.3), WINDOW_HEIGHT/2*(0.0) - 7.5, "彼は豆腐生の心の中で生き続ける");
+        render_jstring(WINDOW_WIDTH/2*(-0.3), WINDOW_HEIGHT/2*(0.2) - 7.5, "文章1");
+        render_jstring(WINDOW_WIDTH/2*(-0.3), WINDOW_HEIGHT/2*(0.0) - 7.5, "文章2");
         // Now Loading...
         render_string(WINDOW_WIDTH/2*(0.6), WINDOW_HEIGHT/2*(-0.75) - 7.5, 0, loading_str.c_str());
         //
