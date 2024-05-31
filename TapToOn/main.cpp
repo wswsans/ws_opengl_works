@@ -266,7 +266,7 @@ void mouse(int button, int state, int x, int y) {
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " settings.json" << endl;
+        cerr << "Usage: " << argv[0] << " map/map_data.txt" << endl;
         return -1;
     }
     /* 初期ロード */
