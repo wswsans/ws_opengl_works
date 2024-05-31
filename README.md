@@ -16,3 +16,11 @@ g++ main.cpp -framework OpenGL -framework GLUT -DGL_SILENCE_DEPRECATION
 ```
 ### Windows
 いろいろな方法がある(?)ので検索してください。
+
+## 存在しないヘッダファイル
+以下のファイルは自作のものではないためここでアップロードしていません。自分で探して追加してください。
+
+ただ、入れただけでは動きません。いくつか加える関数などが必要です。多分いずれそれについて書く。
+
+* vec_op.hpp
+* jfont.h
