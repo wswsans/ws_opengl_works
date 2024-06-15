@@ -1,3 +1,16 @@
+// #include <iostream>
+// #include <cmath>
+// #include <string>
+// #include <vector>
+// // http://www.den.t.u-tokyo.ac.jp/ad_prog/graphics/
+// #ifndef __APPLE__
+// #include <GL/glut.h> // Windows, Linux
+// #else
+// #include <GLUT/glut.h> // Mac
+// #endif
+// #include "../forCopy/CoordSystem.h"
+// using namespace std;
+
 template<typename T>
 void print_vec(string name, vector<T> vec) {
     cout << name << ": (";
@@ -62,9 +75,9 @@ void glCube(double x1, double y1, double z1, double x2, double y2, double z2) {
 }
 
 // require: CommonCoordSystem
-void glArrow(double x0, double y0, double z0, double length, double horizonal_t, double vertical_t) {
+void glArrow(double x0, double y0, double z0, double length, double horizontal, double vertical) {
     // 棒部分
-    vector<double> bou = CommonCoordSystem::pol2cart(length, horizonal_t, vertical_t);
+    vector<double> bou = CommonCoordSystem::pol2cart(length, horizontal, vertical);
     bou[0] += x0;
     bou[1] += y0;
     bou[2] += z0;
@@ -75,10 +88,10 @@ void glArrow(double x0, double y0, double z0, double length, double horizonal_t,
 
     // 矢印
     double theta = M_PI/6;
-    vector<double> arrow_u = CommonCoordSystem::pol2cart(-length * 0.25, horizonal_t + 0*theta/2, vertical_t + theta);
-    vector<double> arrow_d = CommonCoordSystem::pol2cart(-length * 0.25, horizonal_t + 0*theta/2, vertical_t - theta);
-    vector<double> arrow_r = CommonCoordSystem::pol2cart(length / 25, horizonal_t + M_PI/2, 0);
-    vector<double> arrow_l = CommonCoordSystem::pol2cart(length / 25, horizonal_t - M_PI/2, 0);
+    vector<double> arrow_u = CommonCoordSystem::pol2cart(-length * 0.25, horizontal + 0*theta/2, vertical + theta);
+    vector<double> arrow_d = CommonCoordSystem::pol2cart(-length * 0.25, horizontal + 0*theta/2, vertical - theta);
+    vector<double> arrow_r = CommonCoordSystem::pol2cart(length / 25, horizontal + M_PI/2, 0);
+    vector<double> arrow_l = CommonCoordSystem::pol2cart(length / 25, horizontal - M_PI/2, 0);
     glBegin(GL_TRIANGLE_FAN);
     glVertex3d(bou[0], bou[1], bou[2]);
     glVertex3d(
@@ -109,7 +122,7 @@ void glArrow(double x0, double y0, double z0, double length, double horizonal_t,
     glEnd();
 }
 
-void glCurve(double center_x, double center_y, double slope, double range_x, double ex_range) {
+void glCurve(double x0, double y0, double slope, double range_x, double ex_range) {
     glBegin(GL_LINES);
     int j;
     int increment = 1;//2*range_x/vertexes;
@@ -122,10 +135,10 @@ void glCurve(double center_x, double center_y, double slope, double range_x, dou
             if (j > range_x) {
                 j = range_x;
             }
-            pos_x1 = center_x + pm * i;
-            pos_y1 = center_y + slope*pow(i, 2);
-            pos_x2 = center_x + pm * j;
-            pos_y2 = center_y + slope*pow(j, 2);
+            pos_x1 = x0 + pm * i;
+            pos_y1 = y0 + slope*pow(i, 2);
+            pos_x2 = x0 + pm * j;
+            pos_y2 = y0 + slope*pow(j, 2);
             glVertex2d(pos_x1, pos_y1);
             glVertex2d(pos_x2, pos_y2);
         }
@@ -156,21 +169,53 @@ void glCircle(double center_x, double center_y, double center_z, double radius, 
     glEnd();
 }
 
-void glAxis() {
+// require: CommonCoordSystem
+void glCircle3D(double x0, double y0, double z0, double radius, double horizontal, double vertical, double phase, int vertexes, double rate, bool isfill) {
+    if (rate >= 1) {
+        rate = 1;
+    }
+    if (isfill) {
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3d(x0, y0, z0);
+    } else {
+        glBegin(GL_LINE_STRIP);
+    }
+    double cx, cy, cz, theta;
+    double freqency = M_PI * 2 / vertexes;
+    vector<double> circle_hol, circle_ver;
+    for (int i = 0; i <= vertexes; i++) {
+        theta = i * freqency + phase;
+        // 楕円を利用
+        cx = radius * cos(vertical + M_PI/2) * cos(theta);
+        cy = radius * sin(vertical + M_PI/2) * cos(theta);
+        cz = radius * sin(theta);
+        // horizontalでずらす
+        circle_hol = CommonCoordSystem::cart2pol(cx, 0, cz);
+        circle_hol[1] += horizontal;
+        circle_hol = CommonCoordSystem::pol2cart(circle_hol);
+        glVertex3d(x0 + circle_hol[0], y0 + cy, z0 + circle_hol[2]);
+        if (i >= rate * vertexes) {
+            i = vertexes + 1;
+        }
+    }
+    glEnd();
+}
+
+void glAxis(double length = 1000) {
     /* xyz axis */
     glBegin(GL_LINES);
     // x
     glColor3d(0, 0, 1);
     glVertex3d(0, 0, 0);
-    glVertex3d(1000, 0, 0);
+    glVertex3d(length, 0, 0);
     // y
     glColor3d(1, 0, 0);
     glVertex3d(0, 0, 0);
-    glVertex3d(0, 1000, 0);
+    glVertex3d(0, length, 0);
     // z
     glColor3d(0, 1, 0);
     glVertex3d(0, 0, 0);
-    glVertex3d(0, 0, 1000);
+    glVertex3d(0, 0, length);
     glEnd();
     glColor3d(1, 1, 1);
 }

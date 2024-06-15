@@ -1,6 +1,7 @@
 /* include */
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 // http://www.den.t.u-tokyo.ac.jp/ad_prog/graphics/
 #ifndef __APPLE__
@@ -21,7 +22,7 @@ bool using_buffer = false;
 bool playing = true;
 // click
 bool left_click, clicked;
-vector<double> click_pos(2, 0);
+vector<int> click_pos(2, 0);
 
 void doing() {
     if (!playing) return;
@@ -110,7 +111,7 @@ void mouse(int button, int state, int x, int y) {
         //     break;
         default:
             left_click = false;
-            click_pos = {WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2};
+            click_pos = {0, 0};
             break;
     }
     switch (state) {
