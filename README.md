@@ -77,6 +77,14 @@ cppファイルです。hファイルではありません。hファイルだと
 
 これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
 cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+#### Physics.h, Physics.cpp以外のファイル
+サンプルです。すべてのコンパイルで以下の引数を追加する必要があります
+`../forCopy/CoordSystem.cpp Physics.cpp`
+
+force.cppだけforce.cppなのは、力の概念を加えたときに作ったサンプルだからです。
+* projectile_motion.cpp: 放物線運動
+* circle_motion.cpp: 円運動
+* force.cpp: 力の概念を利用した単振動
 
 ### loading
 ローディング画面(単体)です。
