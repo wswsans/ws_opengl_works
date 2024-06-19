@@ -13,17 +13,9 @@
 #include <vector>
 #include "Physics.h"
 #include "../forCopy/CoordSystem.h"
+#include "../forCopy/useful_func.cpp"
 
 using namespace std;
-
-template<typename T>
-void print_vec(string name, vector<T> vec) {
-    cout << name << ": (";
-    for (T i : vec) {
-        cout << i << ", ";
-    }
-    cout << ")" << endl;
-}
 
 /* Physics */
 double cube_size = 5; // distance(center - surface)
@@ -37,20 +29,6 @@ bool using_pers = true;
 bool using_buffer = true;
 bool playing = true;
 vector<double> cam_pos(3, 0);
-
-//! @brief 文字列を表示
-//! @param [in] x 三次元の座標(X)
-//! @param [in] y 三次元の座標(Y)
-//! @param [in] z 三次元の座標(Z)
-//! @param [in] str 文字列（英語のみ）
-void render_string(float x, float y, float z, const char* str) {
-    glRasterPos3f(x, y, z);
-
-    const char* c = str;
-    while (*c) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
-    }
-}
 
 void doing() {
     if (!playing) return;
@@ -108,107 +86,6 @@ void reshape(int width, int height) {
     glViewport(0, 0, width, height);
     WINDOW_WIDTH = width;
     WINDOW_HEIGHT = height;
-}
-
-void glCube(double x1, double y1, double z1, double x2, double y2, double z2) {
-    glBegin(GL_QUADS);
-    // xy, z1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x1, y2, z1);
-    // xy, z2
-    glVertex3d(x1, y1, z2);
-    glVertex3d(x2, y1, z2);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x1, y2, z2);
-    // xz, y1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y1, z2);
-    glVertex3d(x1, y1, z2);
-    // xz, y2
-    glVertex3d(x1, y2, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x1, y2, z2);
-    // yz, x1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x1, y2, z1);
-    glVertex3d(x1, y2, z2);
-    glVertex3d(x1, y1, z2);
-    // yz, x2
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x2, y1, z2);
-    glEnd();
-}
-
-void glArrow(double x0, double y0, double z0, double length, double horizonal_t, double vertical_t) {
-    // 棒部分
-    vector<double> bou = CommonCoordSystem::pol2cart(length, horizonal_t, vertical_t);
-    bou[0] += x0;
-    bou[1] += y0;
-    bou[2] += z0;
-    glBegin(GL_LINES);
-    glVertex3d(x0, y0, z0);
-    glVertex3d(bou[0], bou[1], bou[2]);
-    glEnd();
-
-    // 矢印
-    double theta = M_PI/6;
-    vector<double> arrow_u = CommonCoordSystem::pol2cart(-length * 0.25, horizonal_t + 0*theta/2, vertical_t + theta);
-    vector<double> arrow_d = CommonCoordSystem::pol2cart(-length * 0.25, horizonal_t + 0*theta/2, vertical_t - theta);
-    vector<double> arrow_r = CommonCoordSystem::pol2cart(length / 25, horizonal_t + M_PI/2, 0);
-    vector<double> arrow_l = CommonCoordSystem::pol2cart(length / 25, horizonal_t - M_PI/2, 0);
-    glBegin(GL_TRIANGLE_FAN);
-    glVertex3d(bou[0], bou[1], bou[2]);
-    glVertex3d(
-        bou[0] + arrow_u[0] + arrow_r[0],
-        bou[1] + arrow_u[1] + arrow_r[1],
-        bou[2] + arrow_u[2] + arrow_r[2]
-    );
-    glVertex3d(
-        bou[0] + arrow_d[0] + arrow_r[0],
-        bou[1] + arrow_d[1] + arrow_r[1],
-        bou[2] + arrow_d[2] + arrow_r[2]
-    );
-    glVertex3d(
-        bou[0] + arrow_d[0] + arrow_l[0],
-        bou[1] + arrow_d[1] + arrow_l[1],
-        bou[2] + arrow_d[2] + arrow_l[2]
-    );
-    glVertex3d(
-        bou[0] + arrow_u[0] + arrow_l[0],
-        bou[1] + arrow_u[1] + arrow_l[1],
-        bou[2] + arrow_u[2] + arrow_l[2]
-    );
-    glVertex3d(
-        bou[0] + arrow_u[0] + arrow_r[0],
-        bou[1] + arrow_u[1] + arrow_r[1],
-        bou[2] + arrow_u[2] + arrow_r[2]
-    );
-    glEnd();
-}
-
-void glAxis() {
-    /* xyz axis */
-    glBegin(GL_LINES);
-    // x
-    glColor3d(0, 0, 1);
-    glVertex3d(0, 0, 0);
-    glVertex3d(1000, 0, 0);
-    // y
-    glColor3d(1, 0, 0);
-    glVertex3d(0, 0, 0);
-    glVertex3d(0, 1000, 0);
-    // z
-    glColor3d(0, 1, 0);
-    glVertex3d(0, 0, 0);
-    glVertex3d(0, 0, 1000);
-    glEnd();
-    glColor3d(1, 1, 1);
 }
 
 // values
