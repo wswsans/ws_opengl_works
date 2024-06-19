@@ -24,6 +24,14 @@ g++ main.cpp -framework OpenGL -framework GLUT -DGL_SILENCE_DEPRECATION
 * [vec_op.hpp](https://github.com/birdwatcherYT/vec_op)
 * [jfont.h](https://fujiwaratko.sakura.ne.jp/gcc/glut/glut.html)
 
+## useful_func.cpp
+`forCopy/useful_func.cpp` には、作品の中で作った関数の中で今後も使うだろうなっていう関数をまとめています。
+ご自由にお使いください。
+
+もし、使ったコードを公開するときはこのリポジトリを紹介してください。(クレジット的な?)
+
+(こういうの、しっかりとライセンスを出せば良いのだろうけど詳しく知らなさすぎて...)
+
 ## 作品解説
 ### Tap to On
 [ライツアウト](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%A4%E3%83%84%E3%82%A2%E3%82%A6%E3%83%88)の、ライトを付ける方です。昔iPhoneにも[Android](https://play.google.com/store/apps/details?id=com.gameday.TapToOn_Google)にもあったのですがストアから消されたので自分で作りました。ただゲーム部分だけであって全部再現というわけではありません。
