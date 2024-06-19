@@ -146,6 +146,8 @@ void glCurve(double x0, double y0, double slope, double range_x, double ex_range
     glEnd();
 }
 
+// Recommend: glCircle3D
+// 使ってる場所が多すぎるため残っている
 void glCircle(double center_x, double center_y, double center_z, double radius, double phase, int vertexes, double rate, bool isfill) {
     if (rate >= 1) {
         rate = 1;
@@ -182,7 +184,7 @@ void glCircle3D(double x0, double y0, double z0, double radius, double horizonta
     }
     double cx, cy, cz, theta;
     double freqency = M_PI * 2 / vertexes;
-    vector<double> circle_hol, circle_ver;
+    vector<double> circle;
     for (int i = 0; i <= vertexes; i++) {
         theta = i * freqency + phase;
         // 楕円を利用
@@ -190,10 +192,77 @@ void glCircle3D(double x0, double y0, double z0, double radius, double horizonta
         cy = radius * sin(vertical + M_PI/2) * cos(theta);
         cz = radius * sin(theta);
         // horizontalでずらす
-        circle_hol = CommonCoordSystem::cart2pol(cx, 0, cz);
-        circle_hol[1] += horizontal;
-        circle_hol = CommonCoordSystem::pol2cart(circle_hol);
-        glVertex3d(x0 + circle_hol[0], y0 + cy, z0 + circle_hol[2]);
+        circle = CommonCoordSystem::cart2pol(cx, 0, cz);
+        circle[1] += horizontal;
+        circle = CommonCoordSystem::pol2cart(circle);
+        glVertex3d(x0 + circle[0], y0 + cy, z0 + circle[2]);
+        if (i >= rate * vertexes) {
+            i = vertexes + 1;
+        }
+    }
+    glEnd();
+}
+
+// require: CommonCoordSystem
+void glSpiral(double x0, double y0, double z0, double radius, double height, double horizontal, double vertical, double phase, int vertexes, double rate, bool isfill, double turns) {
+    if (rate >= 1) {
+        rate = 1;
+    }
+    if (isfill) {
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3d(x0, y0, z0);
+    } else {
+        glBegin(GL_LINE_STRIP);
+    }
+    double cx, cy, cz, theta, length;
+    double freqency = M_PI * 2 * turns / vertexes;
+    vector<double> circle, bou;
+    for (int i = 0; i <= vertexes; i++) {
+        theta = i * freqency + phase;
+        length = i * radius / vertexes;
+        // 楕円を利用
+        cx = radius * cos(vertical + M_PI/2) * cos(theta);
+        cy = radius * sin(vertical + M_PI/2) * cos(theta);
+        cz = radius * sin(theta);
+        // horizontalでずらす
+        circle = CommonCoordSystem::cart2pol(cx, 0, cz);
+        bou = CommonCoordSystem::pol2cart(i * length / vertexes, horizontal, vertical);
+        circle[1] += horizontal;
+        circle = CommonCoordSystem::pol2cart(circle);
+        glVertex3d(x0 + bou[0] + circle[0], y0 + bou[1] + cy, z0 + bou[2] + circle[2]);
+        if (i >= rate * vertexes) {
+            i = vertexes + 1;
+        }
+    }
+    glEnd();
+}
+
+void glVortex3D(double x0, double y0, double z0, double radius, double height, double horizontal, double vertical, double phase, int vertexes, double rate, bool isfill, double turns) {
+    if (rate >= 1) {
+        rate = 1;
+    }
+    if (isfill) {
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3d(x0, y0, z0);
+    } else {
+        glBegin(GL_LINE_STRIP);
+    }
+    double cx, cy, cz, theta, length;
+    double freqency = M_PI * 2 * turns / vertexes;
+    vector<double> circle, bou;
+    for (int i = 0; i <= vertexes; i++) {
+        theta = i * freqency + phase;
+        length = i * radius / vertexes;
+        // 楕円を利用
+        cx = length * cos(vertical + M_PI/2) * cos(theta);
+        cy = length * sin(vertical + M_PI/2) * cos(theta);
+        cz = length * sin(theta);
+        // horizontalでずらす
+        circle = CommonCoordSystem::cart2pol(cx, 0, cz);
+        bou = CommonCoordSystem::pol2cart(i * length / vertexes, horizontal, vertical);
+        circle[1] += horizontal;
+        circle = CommonCoordSystem::pol2cart(circle);
+        glVertex3d(x0 + bou[0] + circle[0], y0 + bou[1] + cy, z0 + bou[2] + circle[2]);
         if (i >= rate * vertexes) {
             i = vertexes + 1;
         }
