@@ -83,3 +83,9 @@ glArrowやglPhysicsの時とは違い、こちらはhファイルです。hフ�
 
 これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
 cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+
+### glSpiral
+glCircleのコードを少しいじった結果できた渦や螺旋です。なんと、今回は一気に3種も!
+
+これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
+cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
