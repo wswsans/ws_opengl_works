@@ -30,8 +30,8 @@ vector<int> click_pos(2, 0);
 vector<double> camera_pos(3, 0);
 vector<double> camera_temp(3, 0);
 // glCircle
-double horizontal, vertical, phase, rate = 1, increase_rate = M_PI * 5/180, t_radius = 50;
-bool isfill, hv;
+double horizontal, vertical, phase, rate = 1, increase_rate = M_PI * 5/180, t_radius = 50, turns = 10;
+bool isfill;
 vector<double> t_temp;
 
 void doing() {
@@ -203,10 +203,10 @@ void display(void) {
     //
     glAxis();
     // glCircle(0, 0, 0, 100, horizontal, vertical, phase, 50, rate, isfill);
-    glSpiral(0, 0, 0, 50, horizontal, vertical, phase, 500, rate, isfill, 10);
     glCircle3D(0, 0, 0, 50, horizontal, vertical, phase, 500, rate, isfill);
-    glSpiral3D(150, 0, 0, 50, 50, horizontal, vertical, phase, 500, rate, isfill, 10);
-    glVortex3D(0, 0, 150, 50, 50, horizontal, vertical, phase, 500, rate, isfill, 10);
+    glSpiral(0, 0, 0, 50, horizontal, vertical, phase, 500, rate, isfill, turns);
+    glSpiral3D(150, 0, 0, 50, 50, horizontal, vertical, phase, 500, rate, isfill, turns);
+    glVortex3D(0, 0, 150, 50, 50, horizontal, vertical, phase, 500, rate, isfill, turns);
     //
     glFlush();
     if (using_buffer) {
@@ -265,12 +265,16 @@ void keyboard(unsigned char key, int x, int y) {
             vertical = 0;
             camera_temp = {150, M_PI/4, M_PI/4};
             phase = 0;
+            turns = 10;
             break;
         case 'f':
             isfill = !isfill;
             break;
         case 'v':
-            hv = !hv;
+            turns += 0.1;
+            break;
+        case 'c':
+            turns -= 0.1;
             break;
         case 'q':
             cout << "Quit" << endl;
