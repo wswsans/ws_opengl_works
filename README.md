@@ -21,8 +21,8 @@ g++ main.cpp -framework OpenGL -framework GLUT -DGL_SILENCE_DEPRECATION
 以下のファイルは自作のものではないためここでアップロードしていません。自分で探してforCopyフォルダに追加してください。
 
 ただ、入れただけでは動きません。いくつか加える関数などが必要です。多分いずれそれについて書く。
-* vec_op.hpp
-* jfont.h
+* [vec_op.hpp](https://github.com/birdwatcherYT/vec_op)
+* [jfont.h](https://fujiwaratko.sakura.ne.jp/gcc/glut/glut.html)
 
 ## 作品解説
 ### Tap to On
