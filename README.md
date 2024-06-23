@@ -98,8 +98,9 @@ mapフォルダにあるテキストファイルは、ライトの数やONの位
 使用ライブラリ: CoordSystem.h
 
 #### Physics.h, Physics.cpp以外のファイル
-サンプルです。すべてのコンパイルで以下の引数を追加する必要があります
-`../forCopy/CoordSystem.cpp Physics.cpp`
+サンプルです。
+
+使用ファイル(全て): CoordSystem.h, Physics.h
 
 force.cppだけforce.cppなのは、力の概念を加えたときに作ったサンプルだからです。
 * projectile_motion.cpp: 放物線運動
