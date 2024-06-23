@@ -32,6 +32,27 @@ g++ main.cpp -framework OpenGL -framework GLUT -DGL_SILENCE_DEPRECATION
 
 (こういうの、しっかりとライセンスを出せば良いのだろうけど詳しく知らなさすぎて...)
 
+## コンパイル時に必要になる引数(インクルードファイル編)
+作品をコンパイルするときに引数に追加するファイル一覧です。
+各作品に使っているファイルが記載されているので、それに合わせて追加してください。
+
+=> `...` ←この中のを引数に追加してください。
+
+### CoordSystem.h
+=> `../forCopy/CoordSystem.cpp`
+
+cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+
+### jfont.h
+=> `../forCopy/jfont.h`
+
+CoordSystem.hの時とは違い、こちらはhファイルです。hファイルを引数に追加してください。
+
+### Physics.h
+=> `../glPhysics/Physics.cpp`
+
+CoordSystem.h同様、hファイルではなくcppファイルです。
+
 ## 作品解説
 ### Tap to On
 [ライツアウト](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%A4%E3%83%84%E3%82%A2%E3%82%A6%E3%83%88)の、ライトを付ける方です。昔iPhoneにも[Android](https://play.google.com/store/apps/details?id=com.gameday.TapToOn_Google)にもあったのですがストアから消されたので自分で作りました。ただゲーム部分だけであって全部再現というわけではありません。
@@ -68,15 +89,14 @@ mapフォルダにあるテキストファイルは、ライトの数やONの位
 ### glArrow
 矢印ってあったら楽だなーっていう感じで作りました。
 
-これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
-cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+使用ライブラリ: CoordSystem.h
 
 ### glPhysics
 もとはCoordSystemです。
 これに加えていろいろな概念(力、熱、電磁気等)を追加したいです。(願望)
 
-これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
-cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+使用ライブラリ: CoordSystem.h
+
 #### Physics.h, Physics.cpp以外のファイル
 サンプルです。すべてのコンパイルで以下の引数を追加する必要があります
 `../forCopy/CoordSystem.cpp Physics.cpp`
@@ -90,18 +110,21 @@ force.cppだけforce.cppなのは、力の概念を加えたときに作った�
 ローディング画面(単体)です。
 好きな文字を入れて好きなローディング画面を作ろう。
 
-これを動かすにはforCopy/jfont.hが必要になります。インクルード時に`../forCopy/jfont.h`を引数に追加してください。
-glArrowやglPhysicsの時とは違い、こちらはhファイルです。hファイルを引数に追加してください。
+使用ライブラリ: jfont.h
 
 ### glCircle
 円を任意の法線ベクトル(水平角, 垂直角で定められたベクトル)を使って描くプログラムです。
 ほら, 任意の角度でさ, 動くのってさ, 良いじゃん?
 
-これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
-cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+使用ライブラリ: CoordSystem.h
 
 ### glSpiral
 glCircleのコードを少しいじった結果できた渦や螺旋です。なんと、今回は一気に3種も!
 
-これを動かすにはforCopy/CoordSystem.hが必要になります。インクルード時に`../forCopy/CoordSystem.cpp`を引数に追加してください。
-cppファイルです。hファイルではありません。hファイルだとコンパイルできません。
+使用ライブラリ: CoordSystem.h
+
+### glCube
+既存の立方体関数をいつもも感じで作り直しました。
+そういえば...[glCubeに似た関数ってOpenGLライブラリに存在したような...](https://w.atwiki.jp/opengl/pages/29.html)
+
+使用ライブラリ: CoordSystem.h
