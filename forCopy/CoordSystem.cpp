@@ -6,21 +6,8 @@
 #include "vec_op.hpp"
 using namespace std;
 
-int D = 3;
-vector<double> noneVec(D, 0);
-
-vector<double> errorCut(vector<double> input) {
-    double gosa = 1e3;
-    for(auto itr = input.begin(); itr != input.end(); ++itr) {
-        *itr = floor(*itr/gosa)*gosa;
-    }
-    return input;
-}
-
-bool erChk(double A, double B) {
-    double ErVal = 1e-3;
-    return (abs(A - B) <= ErVal);
-}
+int CoordDim = 3;
+vector<double> CoordNoneVec(CoordDim, 0);
 
 /*** Common CoordSystem ***/
 /* translate */
@@ -35,14 +22,14 @@ double CommonCoordSystem::rad2deg(double Irad) {
 // value, vector, number
 vector<double> CommonCoordSystem::cart2pol(double Ix, double Iy, double Iz) {
     // norm, hoRad, veRad
-    vector<double> temp(D, 0);
+    vector<double> temp(CoordDim, 0);
     double hoNorm = pow(Ix, 2) +  pow(Iz, 2);
     temp[0] = sqrt( hoNorm +  pow(Iy, 2) );
     temp[1] = atan(Iz/Ix);
     temp[2] = atan(Iy/sqrt(hoNorm));
     /// M_PI ズレチェック
-    vector<double> checker = (vector<double>{Ix, Iy, Iz});
-    vector<double> tester  = (CommonCoordSystem::pol2cart(temp));
+    // vector<double> checker = (vector<double>{Ix, Iy, Iz});
+    // vector<double> tester  = (CommonCoordSystem::pol2cart(temp));
     // if (!erChk(checker[0], tester[0]) && !erChk(checker[2], tester[2])) {
     if (Ix < 0) {
         temp[1] += M_PI;
@@ -61,7 +48,7 @@ vector<double> CommonCoordSystem::cart2pol(double Ix, double Iy, double Iz) {
 }
 vector<double> CommonCoordSystem::pol2cart(double Inorm, double IhoRad, double IveRad) {
     // (x, y, z)
-    vector<double> temp(D, 0);
+    vector<double> temp(CoordDim, 0);
     double hoNorm = Inorm * cos(IveRad);
     temp[0] = hoNorm * cos(IhoRad);
     temp[1] = Inorm * sin(IveRad);
@@ -80,19 +67,19 @@ vector<double> CommonCoordSystem::pol2cart(vector<double> Idata) {
 CoordSystem::CoordSystem(int diff_time) {
     diffs = diff_time;
     // noneVecは使えない
-    cartesians = vector< vector<double> >(diff_time + 1, vector<double>(D, 0));
-    polars = vector< vector<double> >(diff_time + 1, vector<double>(D, 0));
+    cartesians = vector< vector<double> >(diff_time + 1, vector<double>(CoordDim, 0));
+    polars = vector< vector<double> >(diff_time + 1, vector<double>(CoordDim, 0));
 }
 /* translate */
 vector<double> CoordSystem::cart2pol(int n) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return CommonCoordSystem::cart2pol(cartesians[n]);
 }
 vector<double> CoordSystem::pol2cart(int n) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return CommonCoordSystem::pol2cart(polars[n]);
 }
@@ -101,7 +88,7 @@ vector<double> CoordSystem::pol2cart(int n) {
 // cart
 vector<double> CoordSystem::setCart(int n, double Ix, double Iy, double Iz) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     cartesians[n][0] = Ix;
     cartesians[n][1] = Iy;
@@ -111,19 +98,19 @@ vector<double> CoordSystem::setCart(int n, double Ix, double Iy, double Iz) {
 }
 vector<double> CoordSystem::setCart(int n, vector<double> Idata) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return setCart(n, Idata[0], Idata[2], Idata[3]);
 }
 vector<double> CoordSystem::getCart(int n) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return cartesians[n];
 }
 vector<double> CoordSystem::getCart(int n, double *Ox, double *Oy, double *Oz) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     vector<double> temp = getCart(n);
     *Ox = temp[0];
@@ -134,7 +121,7 @@ vector<double> CoordSystem::getCart(int n, double *Ox, double *Oy, double *Oz) {
 // polar
 vector<double> CoordSystem::setPol(int n, double Inorm, double IhoRad, double IveRad) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     polars[n][0] = Inorm;
     polars[n][1] = IhoRad;
@@ -144,19 +131,19 @@ vector<double> CoordSystem::setPol(int n, double Inorm, double IhoRad, double Iv
 }
 vector<double> CoordSystem::setPol(int n, vector<double> Idata) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return setPol(n, Idata[0], Idata[2], Idata[3]);
 }
 vector<double> CoordSystem::getPol(int n) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     return polars[n];
 }
 vector<double> CoordSystem::getPol(int n, double *Onorm, double *OhoRad, double *OveRad) {
     if (n > diffs) {
-        return noneVec;
+        return CoordNoneVec;
     }
     vector<double> temp = getPol(n);
     *Onorm = temp[0];
@@ -166,7 +153,7 @@ vector<double> CoordSystem::getPol(int n, double *Onorm, double *OhoRad, double 
 }
 /* get data */
 int CoordSystem::getDimention() {
-    return D;
+    return CoordDim;
 }
 int CoordSystem::getDifferential() {
     return diffs;

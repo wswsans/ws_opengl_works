@@ -12,8 +12,8 @@
 
 using namespace std;
 
-// #include "../forCopy/CoordSystem.h"
-// #include "../forCopy/useful_func.cpp"
+#include "../forCopy/CoordSystem.h"
+#include "../forCopy/useful_func.cpp"
 
 /* OpenGL */
 int WINDOW_WIDTH  = 500;
@@ -30,9 +30,17 @@ vector<double> camera_temp(3, 0);
 // click
 bool left_click, clicked;
 vector<int> click_pos(2, 0);
+//
+vector<double> pos(2, 0);
+double vertical = 0, cube_size = 50;
+double move_rate = 100;
+int direction = 0;
 
 void doing() {
     if (!playing) return;
+    pos[0] += direction * (cube_size / move_rate);
+    vertical -= direction * (M_PI / (2 * move_rate));
+    pos[1] = cube_size * sqrt(2) * sin(fmod(abs(vertical), M_PI/2) + M_PI/4) / 2;
 }
 void timer(int value) {
     doing();
@@ -87,6 +95,8 @@ void reshape(int width, int height) {
 void display(void) {
     InitDisplay();
     //
+    glAxis();
+    glCube(pos[0], pos[1], 0, cube_size, 0, vertical);
     //
     glFlush();
     if (using_buffer) {
@@ -98,8 +108,20 @@ void keyboard(unsigned char key, int x, int y) {
     // printf("key %c at (%d, %d)\n", key, x, y);
     camera_temp = CommonCoordSystem::cart2pol(camera_pos);
     switch (key) {
+        case 'w':
+            direction += 1;
+            break;
+        case 's':
+            direction -= 1;
+            break;
+        case 'e':
+            direction = 0;
+            break;
         case 'r':
+            direction = 0;
             camera_temp = {150, M_PI/4, M_PI/4};
+            vertical = 0;
+            pos = {0, 0};
             break;
         case 'i':
             camera_temp[2] += increase_rate;
@@ -166,7 +188,7 @@ int main(int argc, char **argv) {
     if (using_buffer) {
         glutInitDisplayMode(GLUT_DOUBLE);
     }
-    glutCreateWindow("Title");
+    glutCreateWindow("Moving Cube");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     if (using_timer) {

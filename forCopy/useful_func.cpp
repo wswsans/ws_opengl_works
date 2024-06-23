@@ -39,38 +39,111 @@ void render_string(float x, float y, float z, const char* str) {
     }
 }
 
-void glCube(double x1, double y1, double z1, double x2, double y2, double z2) {
+// require: CommonCoordSystem
+void glCube(double x0, double y0, double z0, double length, double horizontal, double vertical) {
+    vector<double> diagonal_x = CommonCoordSystem::pol2cart(length/2, horizontal, vertical); // x
+    vector<double> diagonal_z = CommonCoordSystem::pol2cart(length/2, horizontal + M_PI/2, 0); // z
+    vector<double> diagonal_y = CommonCoordSystem::pol2cart(length/2, horizontal, vertical + M_PI/2); // y
     glBegin(GL_QUADS);
-    // xy, z1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x1, y2, z1);
-    // xy, z2
-    glVertex3d(x1, y1, z2);
-    glVertex3d(x2, y1, z2);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x1, y2, z2);
-    // xz, y1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y1, z2);
-    glVertex3d(x1, y1, z2);
-    // xz, y2
-    glVertex3d(x1, y2, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x1, y2, z2);
-    // yz, x1
-    glVertex3d(x1, y1, z1);
-    glVertex3d(x1, y2, z1);
-    glVertex3d(x1, y2, z2);
-    glVertex3d(x1, y1, z2);
-    // yz, x2
-    glVertex3d(x2, y1, z1);
-    glVertex3d(x2, y2, z1);
-    glVertex3d(x2, y2, z2);
-    glVertex3d(x2, y1, z2);
+    //
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] + diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] + diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] + diagonal_z[0] + diagonal_y[0],
+        y0 - diagonal_x[1] + diagonal_z[1] + diagonal_y[1],
+        z0 - diagonal_x[2] + diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] - diagonal_z[0] + diagonal_y[0],
+        y0 - diagonal_x[1] - diagonal_z[1] + diagonal_y[1],
+        z0 - diagonal_x[2] - diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 + diagonal_x[0] - diagonal_z[0] + diagonal_y[0],
+        y0 + diagonal_x[1] - diagonal_z[1] + diagonal_y[1],
+        z0 + diagonal_x[2] - diagonal_z[2] + diagonal_y[2]
+    );
+    //
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] - diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] - diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] - diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] + diagonal_z[0] - diagonal_y[0],
+        y0 - diagonal_x[1] + diagonal_z[1] - diagonal_y[1],
+        z0 - diagonal_x[2] + diagonal_z[2] - diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] - diagonal_z[0] - diagonal_y[0],
+        y0 - diagonal_x[1] - diagonal_z[1] - diagonal_y[1],
+        z0 - diagonal_x[2] - diagonal_z[2] - diagonal_y[2]
+    );
+    glVertex3d(
+        x0 + diagonal_x[0] - diagonal_z[0] - diagonal_y[0],
+        y0 + diagonal_x[1] - diagonal_z[1] - diagonal_y[1],
+        z0 + diagonal_x[2] - diagonal_z[2] - diagonal_y[2]
+    );
+    glEnd();
+    glBegin(GL_QUAD_STRIP);
+    // 1
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] + diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] + diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] - diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] - diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] - diagonal_y[2]
+    );
+    // 2
+    glVertex3d(
+        x0 - diagonal_x[0] + diagonal_z[0] + diagonal_y[0],
+        y0 - diagonal_x[1] + diagonal_z[1] + diagonal_y[1],
+        z0 - diagonal_x[2] + diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] + diagonal_z[0] - diagonal_y[0],
+        y0 - diagonal_x[1] + diagonal_z[1] - diagonal_y[1],
+        z0 - diagonal_x[2] + diagonal_z[2] - diagonal_y[2]
+    );
+    // 3
+    glVertex3d(
+        x0 - diagonal_x[0] - diagonal_z[0] + diagonal_y[0],
+        y0 - diagonal_x[1] - diagonal_z[1] + diagonal_y[1],
+        z0 - diagonal_x[2] - diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 - diagonal_x[0] - diagonal_z[0] - diagonal_y[0],
+        y0 - diagonal_x[1] - diagonal_z[1] - diagonal_y[1],
+        z0 - diagonal_x[2] - diagonal_z[2] - diagonal_y[2]
+    );
+    // 4
+    glVertex3d(
+        x0 + diagonal_x[0] - diagonal_z[0] + diagonal_y[0],
+        y0 + diagonal_x[1] - diagonal_z[1] + diagonal_y[1],
+        z0 + diagonal_x[2] - diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 + diagonal_x[0] - diagonal_z[0] - diagonal_y[0],
+        y0 + diagonal_x[1] - diagonal_z[1] - diagonal_y[1],
+        z0 + diagonal_x[2] - diagonal_z[2] - diagonal_y[2]
+    );
+    // 1
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] + diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] + diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] + diagonal_y[2]
+    );
+    glVertex3d(
+        x0 + diagonal_x[0] + diagonal_z[0] - diagonal_y[0],
+        y0 + diagonal_x[1] + diagonal_z[1] - diagonal_y[1],
+        z0 + diagonal_x[2] + diagonal_z[2] - diagonal_y[2]
+    );
     glEnd();
 }
 
@@ -88,8 +161,8 @@ void glArrow(double x0, double y0, double z0, double length, double horizontal, 
 
     // 矢印
     double theta = M_PI/6;
-    vector<double> arrow_u = CommonCoordSystem::pol2cart(-length * 0.25, horizontal + 0*theta/2, vertical + theta);
-    vector<double> arrow_d = CommonCoordSystem::pol2cart(-length * 0.25, horizontal + 0*theta/2, vertical - theta);
+    vector<double> arrow_u = CommonCoordSystem::pol2cart(-length * 0.25, horizontal, vertical + theta);
+    vector<double> arrow_d = CommonCoordSystem::pol2cart(-length * 0.25, horizontal, vertical - theta);
     vector<double> arrow_r = CommonCoordSystem::pol2cart(length / 25, horizontal + M_PI/2, 0);
     vector<double> arrow_l = CommonCoordSystem::pol2cart(length / 25, horizontal - M_PI/2, 0);
     glBegin(GL_TRIANGLE_FAN);
@@ -120,6 +193,9 @@ void glArrow(double x0, double y0, double z0, double length, double horizontal, 
         bou[2] + arrow_u[2] + arrow_r[2]
     );
     glEnd();
+}
+void glArrow(vector<double> pos0, vector<double> angle) {
+    glArrow(pos0[0], pos0[1], pos0[2], angle[0], angle[1], angle[2]);
 }
 
 void glCurve(double x0, double y0, double slope, double range_x, double ex_range) {
