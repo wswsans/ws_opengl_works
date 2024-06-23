@@ -126,6 +126,6 @@ glCircleのコードを少しいじった結果できた渦や螺旋です。な
 
 ### glCube
 既存の立方体関数をいつもも感じで作り直しました。
-そういえば...[glCubeに似た関数ってOpenGLライブラリに存在したような...](https://w.atwiki.jp/opengl/pages/29.html)
+そういえば...glCubeに似た関数ってOpenGLライブラリに存在したような... ( https://w.atwiki.jp/opengl/pages/29.html )
 
 使用ライブラリ: CoordSystem.h
